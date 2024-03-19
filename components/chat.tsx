@@ -44,7 +44,6 @@ interface ChatCompletionRequestMessage {
 export default function Chat() {
   const [textareaHeight, setTextareaHeight] = useState("h-10");
 
-  const textareaRef = useRef(null);
   const router = useRouter();
   const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
   const scrollAreaRef = useRef<null | HTMLDivElement>(null);
@@ -79,7 +78,7 @@ export default function Chat() {
         content: values.prompt,
       };
       const newMessages = [...messages, userMessage];
-      const response = await axios.post(`http://127.0.0.1:5000/chat`, {
+      const response = await axios.post("http://127.0.0.1:5000/chat", {
         messages: newMessages,
       });
       console.log("bot response", response);
@@ -120,7 +119,7 @@ export default function Chat() {
             }}
           />
           {messages.map((message, index) => (
-            <Bubble key={index} message={{ ...message, id: index }} />
+            <Bubble key={index} message={{ ...message, id: message.content }} />
           ))}
         </ScrollArea>
       </CardContent>
@@ -140,7 +139,6 @@ export default function Chat() {
                       <Textarea
                         className={`pr-8 rounded-xl resize-none mendable-textarea min-h-[20px] ${textareaHeight}`}
                         placeholder="Type a message..."
-                        ref={textareaRef}
                         onKeyDown={(e) => {
                           if (e.key === "Enter" && !e.shiftKey) {
                             // Check if Enter is pressed without the Shift key
@@ -160,7 +158,7 @@ export default function Chat() {
 
             <Button
               type="submit"
-              className="h-10 flex py-2 justify-center items-center bg-black text-white duration-300 transition-all hover:scale-90 rounded-xl flex-col px-8 w-24"
+              className="h-10 hover:bg-black flex py-2 justify-center items-center bg-black text-white duration-300 transition-all hover:scale-90 rounded-xl flex-col px-8 w-24"
             >
               {isLoading ? (
                 <div className="flex gap-2 items-center">

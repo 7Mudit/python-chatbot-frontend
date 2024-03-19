@@ -78,9 +78,13 @@ export default function Chat() {
         content: values.prompt,
       };
       const newMessages = [...messages, userMessage];
-      const response = await axios.post("http://127.0.0.1:5000/chat", {
-        messages: newMessages,
-      });
+      // const response = await axios.post("http://127.0.0.1:5000/chat", {
+      const response = await axios.post(
+        "https://python-chatbot-backend.onrender.com/chat",
+        {
+          messages: newMessages,
+        }
+      );
       console.log("bot response", response);
       setMessages((current) => [
         ...current,
